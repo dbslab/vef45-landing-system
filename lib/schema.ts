@@ -11,6 +11,7 @@ async function setupSchema() {
       slug VARCHAR(120) NOT NULL UNIQUE,
       cta_url TEXT NOT NULL,
       video_url TEXT NULL,
+      meta_pixel_id VARCHAR(50) NULL,
       status ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
       is_primary BOOLEAN NOT NULL DEFAULT FALSE,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -26,6 +27,17 @@ async function setupSchema() {
     await pool.query(`
       ALTER TABLE landing_pages
       ADD COLUMN video_url TEXT NULL AFTER cta_url
+    `);
+  }
+
+  const [metaPixelColumn] = await pool.query<RowDataPacket[]>(
+    "SHOW COLUMNS FROM landing_pages LIKE 'meta_pixel_id'"
+  );
+
+  if (metaPixelColumn.length === 0) {
+    await pool.query(`
+      ALTER TABLE landing_pages
+      ADD COLUMN meta_pixel_id VARCHAR(50) NULL AFTER video_url
     `);
   }
 
@@ -61,11 +73,11 @@ async function setupSchema() {
     await pool.query(
       `
         INSERT INTO landing_pages
-          (name, slug, cta_url, video_url, status, is_primary)
+          (name, slug, cta_url, video_url, meta_pixel_id, status, is_primary)
         VALUES
-          (?, ?, ?, ?, 'active', TRUE)
+          (?, ?, ?, ?, ?, 'active', TRUE)
       `,
-      ["Main Landing Page", "main", "#", null]
+      ["Main Landing Page", "main", "#", null, null]
     );
   }
 }

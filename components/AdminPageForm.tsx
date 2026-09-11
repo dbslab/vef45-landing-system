@@ -87,6 +87,24 @@ export default function AdminPageForm({
 
       <label className="block">
         <span className="mb-2 block text-sm text-white/60">
+          Meta Pixel
+        </span>
+
+        <textarea
+          name="meta_pixel"
+          rows={5}
+          defaultValue={page?.metaPixelId || ""}
+          placeholder="Enter Pixel ID or paste the full Meta Pixel code"
+          className="w-full resize-y rounded-xl border border-white/10 bg-black/30 px-4 py-3 font-mono text-sm outline-none transition focus:border-emerald-400"
+        />
+
+        <span className="mt-2 block text-xs leading-5 text-white/30">
+          You can paste only the Pixel ID or the entire code from Meta. Leave empty to disable Meta Pixel on this page.
+        </span>
+      </label>
+
+      <label className="block">
+        <span className="mb-2 block text-sm text-white/60">
           Status
         </span>
 

@@ -143,6 +143,13 @@ export default async function AdminPage({
                         </span>{" "}
                         {page.videoUrl || "Not added"}
                       </p>
+
+                      <p className="break-all">
+                        <span className="text-white/70">
+                          Meta Pixel:
+                        </span>{" "}
+                        {page.metaPixelId || "Not configured"}
+                      </p>
                     </div>
                   </div>
 

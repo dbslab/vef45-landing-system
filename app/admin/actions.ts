@@ -47,6 +47,33 @@ function validHttpUrl(value: string) {
   }
 }
 
+function extractMetaPixelId(value: string) {
+  const input = value.trim();
+
+  if (!input) {
+    return null;
+  }
+
+  if (/^\d{5,30}$/.test(input)) {
+    return input;
+  }
+
+  const patterns = [
+    /fbq\s*\(\s*['"]init['"]\s*,\s*['"](\d{5,30})['"]/i,
+    /[?&]id=(\d{5,30})/i,
+  ];
+
+  for (const pattern of patterns) {
+    const match = input.match(pattern);
+
+    if (match?.[1]) {
+      return match[1];
+    }
+  }
+
+  return null;
+}
+
 async function requireAdmin() {
   const admin = await getCurrentAdmin();
 
@@ -169,6 +196,14 @@ export async function createLandingPageAction(
 
   const videoUrl = videoValue || null;
 
+  const metaPixelInput = String(
+    formData.get("meta_pixel") || ""
+  ).trim();
+
+  const metaPixelId = extractMetaPixelId(
+    metaPixelInput
+  );
+
   const status: LandingPageStatus =
     formData.get("status") === "inactive"
       ? "inactive"
@@ -205,12 +240,20 @@ export async function createLandingPageAction(
     );
   }
 
+  if (metaPixelInput && !metaPixelId) {
+    redirectError(
+      "/admin/new",
+      "Enter a valid Meta Pixel ID or paste the full Meta Pixel code."
+    );
+  }
+
   try {
     await createLandingPage({
       name,
       slug,
       ctaUrl,
       videoUrl,
+      metaPixelId,
       status,
       isPrimary,
     });
@@ -261,6 +304,14 @@ export async function updateLandingPageAction(
 
   const videoUrl = videoValue || null;
 
+  const metaPixelInput = String(
+    formData.get("meta_pixel") || ""
+  ).trim();
+
+  const metaPixelId = extractMetaPixelId(
+    metaPixelInput
+  );
+
   const status: LandingPageStatus =
     formData.get("status") === "inactive"
       ? "inactive"
@@ -299,12 +350,20 @@ export async function updateLandingPageAction(
     );
   }
 
+  if (metaPixelInput && !metaPixelId) {
+    redirectError(
+      errorPath,
+      "Enter a valid Meta Pixel ID or paste the full Meta Pixel code."
+    );
+  }
+
   try {
     await updateLandingPage(id, {
       name,
       slug,
       ctaUrl,
       videoUrl,
+      metaPixelId,
       status,
       isPrimary,
     });

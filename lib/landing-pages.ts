@@ -10,6 +10,7 @@ export type LandingPage = {
   slug: string;
   ctaUrl: string;
   videoUrl: string | null;
+  metaPixelId: string | null;
   status: LandingPageStatus;
   isPrimary: boolean;
   createdAt: Date;
@@ -21,6 +22,7 @@ type LandingPageInput = {
   slug: string;
   ctaUrl: string;
   videoUrl: string | null;
+  metaPixelId: string | null;
   status: LandingPageStatus;
   isPrimary: boolean;
 };
@@ -32,6 +34,7 @@ function mapLandingPage(row: RowDataPacket): LandingPage {
     slug: String(row.slug),
     ctaUrl: String(row.cta_url),
     videoUrl: row.video_url ? String(row.video_url) : null,
+    metaPixelId: row.meta_pixel_id ? String(row.meta_pixel_id) : null,
     status: row.status === "inactive" ? "inactive" : "active",
     isPrimary: Boolean(row.is_primary),
     createdAt: new Date(row.created_at),
@@ -115,15 +118,16 @@ export async function createLandingPage(input: LandingPageInput) {
     const [result] = await connection.execute<ResultSetHeader>(
       `
         INSERT INTO landing_pages
-          (name, slug, cta_url, video_url, status, is_primary)
+          (name, slug, cta_url, video_url, meta_pixel_id, status, is_primary)
         VALUES
-          (?, ?, ?, ?, ?, ?)
+          (?, ?, ?, ?, ?, ?, ?)
       `,
       [
         input.name,
         input.slug,
         input.ctaUrl,
         input.videoUrl,
+        input.metaPixelId,
         input.status,
         input.isPrimary,
       ]
@@ -165,6 +169,7 @@ export async function updateLandingPage(
           slug = ?,
           cta_url = ?,
           video_url = ?,
+          meta_pixel_id = ?,
           status = ?,
           is_primary = ?
         WHERE id = ?
@@ -174,6 +179,7 @@ export async function updateLandingPage(
         input.slug,
         input.ctaUrl,
         input.videoUrl,
+        input.metaPixelId,
         input.status,
         input.isPrimary,
         id,
