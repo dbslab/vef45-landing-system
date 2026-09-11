@@ -1,4 +1,5 @@
 import Script from "next/script";
+import MetaLeadButton from "@/components/MetaLeadButton";
 import type { LandingPage } from "@/lib/landing-pages";
 import { getVideoEmbedUrl } from "@/lib/video";
 
@@ -126,14 +127,12 @@ export default function LandingPageView({
             structure and disciplined execution.
           </p>
 
-          <a
+          <MetaLeadButton
             href={page.ctaUrl}
-            target="_blank"
-            rel="noopener noreferrer"
             className="cta-pulse mt-10 inline-flex min-w-56 items-center justify-center rounded-full bg-emerald-400 px-8 py-4 text-sm font-bold tracking-wide text-black transition hover:scale-[1.03] hover:bg-emerald-300"
           >
             GET VEF45 EA
-          </a>
+          </MetaLeadButton>
         </div>
 
         <div
@@ -181,14 +180,12 @@ export default function LandingPageView({
           </div>
 
           <div className="mt-10 text-center">
-            <a
+            <MetaLeadButton
               href={page.ctaUrl}
-              target="_blank"
-              rel="noopener noreferrer"
               className="inline-flex min-w-56 items-center justify-center rounded-full bg-emerald-400 px-8 py-4 text-sm font-bold tracking-wide text-black transition hover:scale-[1.03] hover:bg-emerald-300"
             >
               GET VEF45 EA
-            </a>
+            </MetaLeadButton>
           </div>
         </div>
       </section>
