@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import AdminPageForm from "@/components/AdminPageForm";
+import AdminShell from "@/components/AdminShell";
 import { createLandingPageAction } from "@/app/admin/actions";
 import { getCurrentAdmin } from "@/lib/auth";
 
@@ -11,43 +12,40 @@ export default async function NewLandingPage({
 }: {
   searchParams: Promise<{ error?: string }>;
 }) {
-  if (!(await getCurrentAdmin())) {
+  const admin = await getCurrentAdmin();
+
+  if (!admin) {
     redirect("/admin/login");
   }
 
   const { error } = await searchParams;
 
   return (
-    <main className="min-h-screen bg-[#050705] px-6 py-10 text-white">
-      <div className="mx-auto max-w-3xl">
+    <AdminShell
+      email={admin.email}
+      title="New Landing Page"
+      subtitle="Create a new campaign using the VEF45 landing template."
+      action={
         <Link
           href="/admin"
-          className="text-sm text-white/40 transition hover:text-white"
+          className="flex w-full items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm text-white/60 transition hover:bg-white/[0.06] sm:w-auto"
         >
-          ← Back to Landing Pages
+          ← Dashboard
         </Link>
-
-        <h1 className="mt-6 text-3xl font-semibold">
-          New Landing Page
-        </h1>
-
-        <p className="mt-2 text-sm text-white/40">
-          Create another campaign using the VEF45 landing page template.
-        </p>
-
-        {error ? (
-          <div className="mt-6 rounded-xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm text-red-300">
-            {error}
-          </div>
-        ) : null}
-
-        <div className="mt-8">
-          <AdminPageForm
-            action={createLandingPageAction}
-            submitLabel="Create Landing Page"
-          />
+      }
+    >
+      {error ? (
+        <div className="mb-5 rounded-2xl border border-red-400/20 bg-red-400/[0.08] px-4 py-3 text-sm text-red-200">
+          {error}
         </div>
+      ) : null}
+
+      <div className="mx-auto max-w-3xl">
+        <AdminPageForm
+          action={createLandingPageAction}
+          submitLabel="Create Landing Page"
+        />
       </div>
-    </main>
+    </AdminShell>
   );
 }
