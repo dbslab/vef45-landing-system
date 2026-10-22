@@ -174,7 +174,7 @@ export default async function AdminPage({
                   </p>
 
                   <p className="mt-1 truncate font-mono text-xs text-emerald-300/80">
-                    vef45-ea.com{publicPath}
+                    vef45-automation-client-ad.dbsads.com{publicPath}
                   </p>
                 </div>
 

@@ -211,7 +211,7 @@ export default function AdminPageForm({
               </span>
 
               <span className="mt-1 block text-xs leading-5 text-white/30">
-                Use this campaign directly at vef45-ea.com instead of a campaign slug.
+                Use this campaign directly at vef45-automation-client-ad.dbsads.com instead of a campaign slug.
               </span>
             </span>
           </label>
